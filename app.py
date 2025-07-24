@@ -1,10 +1,8 @@
-# app.py
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sala_leitura.db'
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -23,6 +21,10 @@ class Emprestimo(db.Model):
     data_devolucao = db.Column(db.String(50), nullable=False)
 
     livro = db.relationship('Livro')
+
+# 🚨 CRIA AS TABELAS SEMPRE QUE O APP CARREGAR
+with app.app_context():
+    db.create_all()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -63,6 +65,4 @@ def index():
     return render_template('index.html', livros=livros, emprestimos=emprestimos)
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
