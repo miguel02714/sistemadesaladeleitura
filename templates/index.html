@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sala de Leitura</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 40px;
+      }
+      h1 {
+        font-size: 32px;
+        margin-bottom: 30px;
+      }
+      .search {
+        text-align: left;
+        margin-bottom: 30px;
+      }
+      .search form {
+        display: inline;
+      }
+      .search input[type="text"] {
+        padding: 10px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+      }
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 20px;
+      }
+      .box {
+        background: #c2bfbf;
+        padding: 20px;
+        border-radius: 8px;
+      }
+      .box h2 {
+        margin-top: 0;
+        font-size: 18px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      form input,
+      form select {
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #7c7b7b;
+        border-radius: 5px;
+      }
+      form button {
+        padding: 10px;
+        background: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .item {
+        background: #fff;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sala de Leitura</h1>
+    <div class="search">
+      <form action="/" method="GET">
+        <input type="text" name="pesquisar" placeholder="Pesquisar livros..." />
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+    <div class="container">
+      <div class="box">
+        <h2>Livros</h2>
+        {% for livro in livros %}
+        <div class="item">
+          <p><strong>Título:</strong> {{ livro.titulo }}</p>
+          <p><strong>Autor:</strong> {{ livro.autor }}</p>
+          <p><strong>Quantidade:</strong> {{ livro.quantidade }}</p>
+        </div>
+        {% else %}
+        <p>Nenhum livro encontrado.</p>
+        {% endfor %}
+      </div>
+
+      <div class="box">
+        <h2>Cadastrar Empréstimo</h2>
+        <form action="/" method="POST">
+          <input
+            type="text"
+            name="nome_aluno"
+            placeholder="Nome do Aluno"
+            required
+          />
+          <input
+            type="text"
+            name="sala_aluno"
+            placeholder="Sala do Aluno"
+            required
+          />
+          <select name="livro_id" required>
+            <option value="">Selecione o Livro</option>
+            {% for livro in livros if livro.quantidade > 0 %}
+            <option value="{{ livro.id }}">
+              {{ livro.titulo }} ({{ livro.quantidade }} disponíveis)
+            </option>
+            {% endfor %}
+          </select>
+          <input type="date" name="data_devolucao" required />
+          <button type="submit">Cadastrar Empréstimo</button>
+        </form>
+
+        <h2 style="margin-top: 30px">Cadastrar Livro</h2>
+        <form action="/" method="POST">
+          <input
+            type="text"
+            name="titulo_livro"
+            placeholder="Título do Livro"
+            required
+          />
+          <input type="text" name="autor_livro" placeholder="Autor" required />
+          <input
+            type="number"
+            name="quantidade_livro"
+            placeholder="Quantidade"
+            required
+            min="1"
+          />
+          <button type="submit">Cadastrar Livro</button>
+        </form>
+      </div>
+
+      <div class="box">
+        <h2>Alunos Devedores</h2>
+        {% for emp in emprestimos %}
+        <div class="item">
+          <p><strong>Aluno:</strong> {{ emp.nome_aluno }}</p>
+          <p><strong>Sala:</strong> {{ emp.sala_aluno }}</p>
+          <p><strong>Livro:</strong> {{ emp.livro.titulo }}</p>
+          <p><strong>Devolver até:</strong> {{ emp.data_devolucao }}</p>
+        </div>
+        {% else %}
+        <p>Sem empréstimos.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
