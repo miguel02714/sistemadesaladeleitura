@@ -1,4 +1,9 @@
-Flask==2.3.2
-Flask-SQLAlchemy==3.0.3
-SQLAlchemy==2.0.15
-gunicorn==20.1.0
+Flask==2.3.3
+Flask-Login==0.6.3
+Flask-SQLAlchemy==3.1.1
+Werkzeug==2.3.7
+requests==2.31.0
+python-dotenv==1.0.1
+gunicorn==21.2.0
+cohere==4.44
+google-auth==2.20.0
